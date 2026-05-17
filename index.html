@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>لعبة حب ❤️</title>
+<title>لعبة شهر العسل ❤️</title>
 
 <style>
 
@@ -21,48 +21,51 @@ body{
     display:flex;
     justify-content:center;
     align-items:center;
-    background:linear-gradient(135deg,#ff7eb3,#ffb6d9,#ffd6ec);
+    background:linear-gradient(-45deg,#ff7eb3,#ff758c,#ffb199,#ffd6ec);
     background-size:400% 400%;
     animation:bg 10s infinite alternate;
 }
 
-/* حركة الخلفية */
 @keyframes bg{
-    0%{
-        background-position:left;
-    }
-    100%{
-        background-position:right;
-    }
+    0%{background-position:left;}
+    100%{background-position:right;}
 }
 
-/* الصندوق */
 .box{
     width:90%;
-    max-width:400px;
+    max-width:430px;
     padding:30px;
-    border-radius:25px;
+    border-radius:30px;
     text-align:center;
-    background:rgba(255,255,255,0.2);
-    backdrop-filter:blur(10px);
+    background:rgba(255,255,255,0.18);
+    backdrop-filter:blur(12px);
     box-shadow:0 0 25px rgba(0,0,0,0.2);
     z-index:2;
+    animation:show 1s ease;
 }
 
-/* الصورة */
+@keyframes show{
+    from{
+        transform:scale(0.8);
+        opacity:0;
+    }
+    to{
+        transform:scale(1);
+        opacity:1;
+    }
+}
+
 img{
-    width:120px;
-    margin-bottom:20px;
-    animation:pulse 2s infinite;
+    width:110px;
+    margin-bottom:15px;
+    animation:float 2s infinite alternate;
 }
 
-@keyframes pulse{
-    0%{transform:scale(1);}
-    50%{transform:scale(1.1);}
-    100%{transform:scale(1);}
+@keyframes float{
+    from{transform:translateY(0);}
+    to{transform:translateY(-10px);}
 }
 
-/* السؤال */
 h1{
     color:white;
     font-size:28px;
@@ -70,32 +73,26 @@ h1{
     text-shadow:0 0 10px #ff1493;
 }
 
-/* الأزرار */
 button{
+    display:block;
+    width:100%;
     border:none;
+    padding:14px;
+    margin:10px 0;
     border-radius:15px;
-    padding:12px 25px;
-    margin:10px;
-    font-size:20px;
+    font-size:19px;
     cursor:pointer;
     transition:0.3s;
     color:white;
-}
-
-.yes{
     background:#ff1493;
 }
 
-.no{
-    background:#666;
-}
-
 button:hover{
-    transform:scale(1.1);
+    transform:scale(1.05);
+    background:#ff69b4;
 }
 
-/* الرسالة */
-#message{
+#result{
     color:white;
     font-size:22px;
     line-height:2;
@@ -104,17 +101,23 @@ button:hover{
 }
 
 /* القلوب */
+
 .heart{
     position:absolute;
-    bottom:-50px;
     color:red;
-    animation:float linear forwards;
+    animation:hearts linear forwards;
+    opacity:0.8;
 }
 
-@keyframes float{
-    to{
-        transform:translateY(-110vh);
+@keyframes hearts{
+    from{
+        transform:translateY(100vh) scale(0.5);
         opacity:0;
+    }
+
+    to{
+        transform:translateY(-120vh) scale(1.5);
+        opacity:1;
     }
 }
 
@@ -123,82 +126,148 @@ button:hover{
 
 <body>
 
-<!-- موسيقى -->
-<audio autoplay loop>
-<source src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_c8c8e2b3b1.mp3?filename=romantic-love-11786.mp3">
-</audio>
-
 <div class="box">
 
-<img src="https://cdn-icons-png.flaticon.com/512/833/833472.png">
+<img src="https://cdn-icons-png.flaticon.com/512/742/742751.png">
 
-<h1 id="question">هل تحبني؟ ❤️</h1>
+<h1 id="question">
+أين تودين قضاء شهر العسل؟ ❤️
+</h1>
 
-<div id="buttons">
-    <button class="yes" onclick="nextQuestion()">نعم 💖</button>
-    <button class="no" onclick="showOnlyYes()">لا 😢</button>
+<div id="answers">
+
+<button onclick="next('سويسرا 🇨🇭')">
+سويسرا 🇨🇭
+</button>
+
+<button onclick="next('فرنسا 🇫🇷')">
+فرنسا 🇫🇷
+</button>
+
+<button onclick="next('إسبانيا 🇪🇸')">
+إسبانيا 🇪🇸
+</button>
+
+<button onclick="next('المالديف 🏝️')">
+المالديف 🏝️
+</button>
+
 </div>
 
-<div id="message"></div>
+<div id="result"></div>
 
 </div>
 
 <script>
 
+let step = 0;
+
+let choices = {};
+
 /* الأسئلة */
 
-let questions = [
-    "هل تحبني؟ ❤️",
-    "هل أنا مميز لديك؟ 🌸",
-    "هل ستبقى معي دائما؟ 🥺",
-    "هل تريد رؤية الرسالة الأخيرة؟ 💌"
+const questions = [
+
+{
+q:"ما أجمل شيء تريدين فعله هناك؟ 💕",
+answers:[
+"مشاهدة الغروب 🌅",
+"عشاء رومانسي 🍷",
+"التجول معا 🚶‍♂️❤️🚶‍♀️",
+"التقاط الصور 📸"
+]
+},
+
+{
+q:"أي هدية تريدين مني؟ 🎁",
+answers:[
+"خاتم 💍",
+"وردة 🌹",
+"رسالة حب 💌",
+"عناق طويل 🤗"
+]
+},
+
+{
+q:"ما الأغنية التي سنرقص عليها؟ 🎶",
+answers:[
+"أغنية رومانسية هادئة ❤️",
+"أغنية BTS 💜",
+"أغنية حزينة قليلا 🥺",
+"أي شيء معك جميل ✨"
+]
+}
+
 ];
 
-let current = 0;
+/* الانتقال */
 
-/* زر نعم */
+function next(answer){
 
-function nextQuestion(){
+    choices["step"+step] = answer;
 
-    current++;
+    step++;
 
-    if(current < questions.length){
+    if(step <= questions.length){
 
-        document.getElementById("question").innerText = questions[current];
+        showQuestion();
 
     }else{
 
-        document.getElementById("question").style.display = "none";
-        document.getElementById("buttons").style.display = "none";
-
-        document.getElementById("message").innerText =
-`أنت قلبي وروحي وسندي ❤️
-
-قد لا اكون افضل شخص لكنني تذكري انا دائما معك
-ساستمع لك دائما
-
-احبك كثيرااا "ن"
-احبببك كثيرااا
-
-انت روحي وعمري وقلبي وبحري وكل شيء
-انت دنياي وكل شيء
-انت عالمي الخاص ❤️`;
+        showFinal();
     }
-
 }
 
-/* عند الضغط على لا */
+/* عرض السؤال */
 
-function showOnlyYes(){
+function showQuestion(){
+
+    let current = questions[step-1];
 
     document.getElementById("question").innerText =
-    "لا يوجد خيار آخر 😌❤️";
+    current.q;
 
-    document.getElementById("buttons").innerHTML =
-    `<button class="yes" onclick="nextQuestion()">حسنا... نعم 💖</button>`;
+    let html = "";
+
+    current.answers.forEach(a=>{
+
+        html += `
+        <button onclick="next('${a}')">
+        ${a}
+        </button>
+        `;
+    });
+
+    document.getElementById("answers").innerHTML =
+    html;
 }
 
-/* القلوب المتطايرة */
+/* النهاية */
+
+function showFinal(){
+
+    document.getElementById("question").style.display =
+    "none";
+
+    document.getElementById("answers").style.display =
+    "none";
+
+    document.getElementById("result").innerText =
+`❤️ خطتنا المثالية ❤️
+
+سنذهب معا إلى ${choices.step0}
+
+وسنشاهد أجمل اللحظات معا ✨
+
+وسأهديك ${choices.step2}
+
+وسنرقص على ${choices.step3}
+
+لكن بصراحة...
+أي مكان معك يصبح جنة ❤️`;
+}
+
+/* القلوب */
 
 function createHeart(){
 
@@ -208,22 +277,24 @@ function createHeart(){
 
     heart.innerHTML = "❤️";
 
-    heart.style.left = Math.random() * 100 + "vw";
+    heart.style.left = Math.random()*100 + "vw";
 
-    heart.style.fontSize = (20 + Math.random() * 25) + "px";
+    heart.style.fontSize =
+    (20 + Math.random()*30)+"px";
 
-    heart.style.animationDuration = (3 + Math.random() * 5) + "s";
+    heart.style.animationDuration =
+    (4 + Math.random()*5)+"s";
 
     document.body.appendChild(heart);
 
     setTimeout(()=>{
         heart.remove();
-    },8000);
+    },9000);
 }
 
-setInterval(createHeart,300);
+setInterval(createHeart,250);
 
 </script>
 
 </body>
-    </html>
+</html>
