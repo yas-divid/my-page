@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Yassir & Noha ❤️</title>
+<style>
+body{margin:0;font-family:Tahoma,Arial,sans-serif;background:linear-gradient(135deg,#090011,#1b082f,#2c0b52);color:#fff}
+header{padding:60px 20px;text-align:center}
+section{max-width:1000px;margin:20px auto;padding:20px}
+.card{background:rgba(255,255,255,.08);backdrop-filter:blur(10px);border-radius:18px;padding:20px;margin:15px 0}
+h1,h2{color:#d7b3ff}
+input,textarea,button{width:100%;padding:10px;margin:5px 0;border-radius:10px;border:none}
+button{cursor:pointer;background:#8b5cf6;color:white}
+.small{font-size:.9em;opacity:.8}
+</style>
+</head>
+<body>
+
+<header>
+<h1>❤️ Yassir & Noha ❤️</h1>
+<p>رحلة بدأت في 2025 وما زالت مستمرة بإذن الله</p>
+<div id="countdowns"></div>
+</header>
+
+<section class="card">
+<h2>📜 قصتنا</h2>
+<p>
+تعرف ياسر البركاني على نوها في المدرسة خلال سنة 2025.
+بعد أشهر من التفكير العميق والتأكد أن ما يشعر به ليس مجرد إعجاب بل حب حقيقي،
+اعترف لها بحبه في أواخر شهر 12 من سنة 2025.
+ثم اعترفت هي الأخرى بمشاعرها بطريقة جميلة لا تُنسى، عندما أرسلت رسالة حب باللغة اليابانية
+وكأن شخصًا آخر أرسلها لها، محاولةً دفعه للاعتراف بمشاعره.
+في يناير 2026 بدأت القصة تتطور أكثر.
+وفي عيد الفطر زارها وقدم لها بعض الحلويات، فردت له الجميل بأكثر مما أعطاها.
+تبادلا الهدايا والذكريات الجميلة.
+وفي رحلة مدرسية جلسا بجانب بعضهما في السينما، وعندما اقترب ليخبرها بشيء التقت أعينهما،
+فقالت بخجل: "ابتعد قليلاً، أنت قريب جدًا".
+كانت محمرة الوجه بطريقة لطيفة لا تُنسى.
+مرت بينهما لحظات جميلة وصعبة، لكنها كانت دائمًا تستمع إليه وتحتويه وتسامحه على أخطائه.
+</p>
+</section>
+
+<section class="card">
+<h2>💌 الرسائل السرية</h2>
+<div id="messages"></div>
+</section>
+
+<section class="card">
+<h2>🌟 أحلامنا المشتركة</h2>
+<input id="dreamTitle" placeholder="عنوان الحلم">
+<textarea id="dreamDesc" placeholder="وصف الحلم"></textarea>
+<button onclick="addDream()">إضافة حلم</button>
+<div id="dreams"></div>
+</section>
+
+<section class="card">
+<h2>📝 رسائل مستقبلية جديدة</h2>
+<input id="mTitle" placeholder="عنوان الرسالة">
+<textarea id="mText" placeholder="محتوى الرسالة"></textarea>
+<input id="mPass" placeholder="كلمة مرور اختيارية">
+<input id="mDate" type="date">
+<button onclick="saveMessage()">حفظ الرسالة</button>
+<div id="customMessages"></div>
+</section>
+
+<script>
+const engagementDate = new Date("2029-10-04");
+const weddingDate = new Date("2030-10-01");
+
+function updateCountdowns(){
+ let now=new Date();
+ function diff(target){
+   let d=Math.floor((target-now)/(1000*60*60*24));
+   return d>0?d+" يوم":"لقد حان الموعد ❤️";
+ }
+ document.getElementById("countdowns").innerHTML=
+ `<div class="card">💍 الخطوبة: ${diff(engagementDate)}</div>
+  <div class="card">👰 الزواج: ${diff(weddingDate)}</div>`;
+}
+updateCountdowns();
+
+async function hashText(text){
+ const enc=new TextEncoder().encode(text);
+ const hash=await crypto.subtle.digest('SHA-256',enc);
+ return Array.from(new Uint8Array(hash)).map(b=>b.toString(16).padStart(2,'0')).join('');
+}
+
+const secretMessages=[
+{
+title:"رسالة يوم الخطوبة",
+unlockDate:"2029-10-04",
+text:"ها قد وفيت بوعدي واتيت لك يانوها الخاصة بي"
+},
+{
+title:"رسالة يوم الزواج",
+unlockDate:"2030-10-01",
+text:"كما وعدتك ها قد حققت الوعد قمت بافراحتك سنشيخ معا ان شاء الله لن اتررككك ابدا هذا كان وعدي لك وسأكون معك رجلا للابد سأحميك ساكون درعا لك كما كنت سابقا وسأكون درعا اقوى لك من الان فصاعدا"
+},
+{
+title:"رسالة أحبك",
+password:"احبك",
+text:"نوها أنا احبك أيضا احبك كثيرا شكرا لك على كل شيء انت هي قلبي احبك كثيرااا مشاعري لا استطيع وصفها بالكلمات فقط لكن صدقني أحبك كثيرا وكل يوم أحمد الله على انك في حياتي 🫶"
+}
+];
+
+function renderMessages(){
+ let c=document.getElementById("messages");
+ c.innerHTML="";
+ secretMessages.forEach((m,i)=>{
+  let div=document.createElement("div");
+  div.className="card";
+  div.innerHTML=`<b>${m.title}</b><br><button onclick="openSecret(${i})">فتح</button>`;
+  c.appendChild(div);
+ });
+}
+renderMessages();
+
+async function openSecret(i){
+ const m=secretMessages[i];
+
+ if(m.unlockDate){
+   if(new Date() < new Date(m.unlockDate)){
+      alert("هذه الرسالة لا يمكن فتحها قبل "+m.unlockDate);
+      return;
+   }
+ }
+
+ if(m.password){
+   let p=prompt("أدخل كلمة المرور");
+   if((p||"").trim()!==m.password){
+      alert("كلمة المرور غير صحيحة");
+      return;
+   }
+ }
+
+ alert(m.text);
+}
+
+function loadDreams(){
+ const dreams=JSON.parse(localStorage.getItem("dreams")||"[]");
+ document.getElementById("dreams").innerHTML=dreams.map(d=>
+ `<div class='card'><b>${d.title}</b><p>${d.desc}</p></div>`).join("");
+}
+function addDream(){
+ let title=document.getElementById("dreamTitle").value;
+ let desc=document.getElementById("dreamDesc").value;
+ if(!title)return;
+ let dreams=JSON.parse(localStorage.getItem("dreams")||"[]");
+ dreams.push({title,desc});
+ localStorage.setItem("dreams",JSON.stringify(dreams));
+ loadDreams();
+}
+loadDreams();
+
+function saveMessage(){
+ const title=mTitle.value;
+ const text=mText.value;
+ const pass=mPass.value;
+ const date=mDate.value;
+
+ let msgs=JSON.parse(localStorage.getItem("customMsgs")||"[]");
+ msgs.push({title,text,pass,date});
+ localStorage.setItem("customMsgs",JSON.stringify(msgs));
+ renderCustom();
+}
+
+function renderCustom(){
+ let msgs=JSON.parse(localStorage.getItem("customMsgs")||"[]");
+ customMessages.innerHTML=msgs.map((m,i)=>
+ `<div class='card'><b>${m.title}</b><br><button onclick='openCustom(${i})'>فتح</button></div>`).join("");
+}
+
+function openCustom(i){
+ let msgs=JSON.parse(localStorage.getItem("customMsgs")||"[]");
+ let m=msgs[i];
+
+ if(m.date && new Date()<new Date(m.date)){
+   alert("لم يحن موعد فتح الرسالة");
+   return;
+ }
+
+ if(m.pass){
+   let p=prompt("كلمة المرور");
+   if(p!==m.pass){alert("خاطئة");return;}
+ }
+
+ alert(m.text);
+}
+renderCustom();
+</script>
+
+</body>
+</html>
